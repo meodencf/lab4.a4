@@ -9,20 +9,16 @@ package cau1;
  *
  * @author MINHNHAT
  */
-public abstract class  Giaodich{
-
-    protected String maGD;
-    protected String ngayGD;
+public class GiaoDich {
+    protected String maGiaoDich;
+    protected String ngayGiaoDich;
     protected double donGia;
     protected double dienTich;
 
-    public Giaodich(String maGD, String ngayGD, double donGia, double dienTich) {
-        this.maGD = maGD;
-        this.ngayGD = ngayGD;
+    public GiaoDich(String maGiaoDich, String ngayGiaoDich, double donGia, double dienTich) {
+        this.maGiaoDich = maGiaoDich;
+        this.ngayGiaoDich = ngayGiaoDich;
         this.donGia = donGia;
         this.dienTich = dienTich;
     }
-
-    public abstract double tinhThanhTien();
 }
-    

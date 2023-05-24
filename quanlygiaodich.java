@@ -5,136 +5,129 @@
  */
 package cau1;
 
-/**
- *
- * @author MINHNHAT
- */
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
- class QuanLyGiaoDich {
-    private List<Giaodich> danhSachGiaoDich;
+public class QuanLyGiaoDich {
+    private List<GiaoDich> danhSachGiaoDich;
 
     public QuanLyGiaoDich() {
         danhSachGiaoDich = new ArrayList<>();
     }
 
+    public void themGiaoDich(GiaoDich giaoDich) {
+        danhSachGiaoDich.add(giaoDich);
+    }
+
+    public int demSoLuongLoaiDat(String loaiDat) {
+        int count = 0;
+        for (GiaoDich giaoDich : danhSachGiaoDich) {
+            if (giaoDich instanceof GiaoDichDat) {
+                GiaoDichDat giaoDichDat = (GiaoDichDat) giaoDich;
+                if (giaoDichDat.loaiDat.equals(loaiDat)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    public double tinhTrungBinhThanhTienDat() {
+        double sum = 0;
+        int count = 0;
+        for (GiaoDich giaoDich : danhSachGiaoDich) {
+            if (giaoDich instanceof GiaoDichDat) {
+                GiaoDichDat giaoDichDat = (GiaoDichDat) giaoDich;
+                sum += giaoDichDat.tinhThanhTien();
+                count++;
+            }
+        }
+        if (count > 0) {
+            return sum / count;
+        } else {
+            return 0;
+        }
+    }
+
+    public List<GiaoDich> timGiaoDichThang9Nam2013() {
+        List<GiaoDich> ketQua = new ArrayList<>();
+        for (GiaoDich giaoDich : danhSachGiaoDich) {
+            if (giaoDich.ngayGiaoDich.startsWith("09/") && giaoDich.ngayGiaoDich.endsWith("/2013")) {
+                ketQua.add(giaoDich);
+            }
+        }
+        return ketQua;
+    }
+
     public void nhapDanhSachGiaoDich() {
         Scanner scanner = new Scanner(System.in);
+
         System.out.print("Nhập số lượng giao dịch: ");
         int soLuong = scanner.nextInt();
-        scanner.nextLine(); 
+        scanner.nextLine(); // Đọc bỏ ký tự xuống dòng sau lệnh nextInt()
 
         for (int i = 0; i < soLuong; i++) {
-            System.out.print("Nhập loại giao dịch (dat/nha): ");
-            String loaiGD = scanner.nextLine();
+            System.out.println("Nhập thông tin cho giao dịch thứ " + (i + 1) + ":");
+            System.out.print("Loại giao dịch (dat/nha): ");
+            String loaiGiaoDich = scanner.nextLine();
 
-            System.out.print("Nhập mã giao dịch: ");
-            String maGD = scanner.nextLine();
+            System.out.print("Mã giao dịch: ");
+            String maGiaoDich = scanner.nextLine();
 
-            System.out.print("Nhập ngày giao dịch (ngày/tháng/năm): ");
-            String ngayGD = scanner.nextLine();
+            System.out.print("Ngày giao dịch (dd/mm/yyyy): ");
+            String ngayGiaoDich = scanner.nextLine();
 
-            System.out.print("Nhập đơn giá: ");
+            System.out.print("Đơn giá: ");
             double donGia = scanner.nextDouble();
+            scanner.nextLine(); // Đọc bỏ ký tự xuống dòng sau lệnh nextDouble()
 
-            System.out.print("Nhập diện tích: ");
+            System.out.print("Diện tích: ");
             double dienTich = scanner.nextDouble();
-            scanner.nextLine(); 
+            scanner.nextLine(); // Đọc bỏ ký tự xuống dòng sau lệnh nextDouble()
 
-            if (loaiGD.equals("dat")) {
-                System.out.print("Nhập loại đất (A/B/C): ");
+            if (loaiGiaoDich.equals("dat")) {
+                System.out.print("Loại đất (A/B/C): ");
                 String loaiDat = scanner.nextLine();
-                Giaodichdat gd = new Giaodichdat(maGD, ngayGD, donGia, dienTich, loaiDat);
-                danhSachGiaoDich.add(gd);
-            } else if (loaiGD.equals("nha")) {
-                System.out.print("Nhập loại nhà (cao_cap/thuong): ");
+
+                GiaoDichDat giaoDichDat = new GiaoDichDat(maGiaoDich, ngayGiaoDich, donGia, loaiDat, dienTich);
+                themGiaoDich(giaoDichDat);
+            } else if (loaiGiaoDich.equals("nha")) {
+                System.out.print("Loại nhà (cao cap/thuong): ");
                 String loaiNha = scanner.nextLine();
 
-                System.out.print("Nhập địa chỉ: ");
+                System.out.print("Địa chỉ: ");
                 String diaChi = scanner.nextLine();
 
-                Giaodichnha gd = new Giaodichnha(maGD, ngayGD, donGia, dienTich, loaiNha, diaChi);
-                danhSachGiaoDich.add(gd);
+                GiaoDichNha giaoDichNha = new GiaoDichNha(maGiaoDich, ngayGiaoDich, donGia, loaiNha, diaChi, dienTich);
+                themGiaoDich(giaoDichNha);
+            } else {
+                System.out.println("Loại giao dịch không hợp lệ.");
             }
         }
     }
 
     public void xuatDanhSachGiaoDich() {
         System.out.println("Danh sách giao dịch:");
-        for (Giaodich gd : danhSachGiaoDich) {
-            if (gd instanceof Giaodichdat) {
-                System.out.println("Giao dịch đất");
-                System.out.println("Mã giao dịch: " + gd.maGD);
-                System.out.println("Ngày giao dịch: " + gd.ngayGD);
-                System.out.println("Đơn giá: " + gd.donGia);
-                System.out.println("Diện tích: " + gd.dienTich);
-                System.out.println("Loại đất: " + ((Giaodichdat) gd).loaidat);
-                System.out.println("Thành tiền: " + gd.tinhThanhTien());
-            } else if (gd instanceof Giaodichnha) {
-                System.out.println("Giao dịch nhà");
-                System.out.println("Mã giao dịch: " + gd.maGD);
-                System.out.println("Ngày giao dịch: " + gd.ngayGD);
-                System.out.println("Đơn giá: " + gd.donGia);
-                System.out.println("Diện tích: " + gd.dienTich);
-                System.out.println("Loại nhà: " + ((Giaodichnha) gd).loaiNha);
-                System.out.println("Địa chỉ: " + ((Giaodichnha) gd).diaChi);
-                System.out.println("Thành tiền: " + gd.tinhThanhTien());
+        for (GiaoDich giaoDich : danhSachGiaoDich) {
+            System.out.println("Mã giao dịch: " + giaoDich.maGiaoDich);
+            System.out.println("Ngày giao dịch: " + giaoDich.ngayGiaoDich);
+            System.out.println("Đơn giá: " + giaoDich.donGia);
+            System.out.println("Diện tích: " + giaoDich.dienTich);
+
+            if (giaoDich instanceof GiaoDichDat) {
+                GiaoDichDat giaoDichDat = (GiaoDichDat) giaoDich;
+                System.out.println("Loại đất: " + giaoDichDat.loaiDat);
+                System.out.println("Thành tiền: " + giaoDichDat.tinhThanhTien());
+            } else if (giaoDich instanceof GiaoDichNha) {
+                GiaoDichNha giaoDichNha = (GiaoDichNha) giaoDich;
+                System.out.println("Loại nhà: " + giaoDichNha.loaiNha);
+                System.out.println("Địa chỉ: " + giaoDichNha.diaChi);
+                System.out.println("Thành tiền: " + giaoDichNha.tinhThanhTien());
             }
+
+            System.out.println("-------------------------");
         }
     }
 
-    public void tinhTongSoLuong() {
-        int soLuongDat = 0;
-        int soLuongNha = 0;
-        for (Giaodich gd : danhSachGiaoDich) {
-            if (gd instanceof Giaodichdat) {
-                soLuongDat++;
-            } else if (gd instanceof Giaodichnha) {
-                soLuongNha++;
-            }
-        }
-        System.out.println("Số lượng giao dịch đất: " + soLuongDat);
-        System.out.println("Số lượng giao dịch nhà: " + soLuongNha);
-    }
-
-    public void tinhTrungBinhThanhTienDat() {
-        double tongThanhTienDat = 0;
-        int soLuongDatCoGia = 0;
-        for (Giaodich gd : danhSachGiaoDich) {
-            if (gd instanceof Giaodichdat) {
-                tongThanhTienDat += gd.tinhThanhTien();
-                soLuongDatCoGia++;
-            }
-        }
-        double trungBinhThanhTienDat = soLuongDatCoGia > 0 ? tongThanhTienDat / soLuongDatCoGia : 0;
-        System.out.println("Trung bình thành tiền của giao dịch đất: " + trungBinhThanhTienDat);
-    }
-
-    public void xuatGiaoDichThang9Nam2013() {
-        System.out.println("Các giao dịch tháng 9 năm 2013:");
-        for (Giaodich gd : danhSachGiaoDich) {
-            if (gd.ngayGD.startsWith("09/2013")) {
-                if (gd instanceof Giaodichdat) {
-                    System.out.println("Giao dịch đất");
-                    System.out.println("Mã giao dịch: " + gd.maGD);
-                    System.out.println("Ngày giao dịch: " + gd.ngayGD);
-                    System.out.println("Đơn giá: " + gd.donGia);
-                    System.out.println("Diện tích: " + gd.dienTich);
-                    System.out.println("Loại đất: " + ((Giaodichdat) gd).loaidat);
-                    System.out.println("Thành tiền: " + gd.tinhThanhTien());
-                } else if (gd instanceof Giaodichnha) {
-                    System.out.println("Giao dịch nhà");
-                    System.out.println("Mã giao dịch: " + gd.maGD);
-                    System.out.println("Ngày giao dịch: " + gd.ngayGD);
-                    System.out.println("Đơn giá: " + gd.donGia);
-                    System.out.println("Diện tích: " + gd.dienTich);
-                    System.out.println("Loại nhà: " + ((Giaodichnha) gd).loaiNha);
-                    System.out.println("Địa chỉ: " + ((Giaodichnha) gd).diaChi);
-                    System.out.println("Thành tiền: " + gd.tinhThanhTien());
-                }
-            }
-        }
-    }
 }

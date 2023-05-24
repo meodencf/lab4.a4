@@ -9,69 +9,18 @@ package cau1;
  *
  * @author MINHNHAT
  */
-public class Giaodichnha extends Giaodich {
-    String loaiNha;
-    String diaChi;
+public class GiaoDichNha extends GiaoDich {
+    protected String loaiNha;
+    protected String diaChi;
 
-
-    Giaodichnha(String maGD, String ngayGD, double donGia, double dienTich, String loaiNha, String diaChi) {
-        super(maGD, ngayGD, donGia, dienTich);
+    public GiaoDichNha(String maGiaoDich, String ngayGiaoDich, double donGia, String loaiNha, String diaChi, double dienTich) {
+        super(maGiaoDich, ngayGiaoDich, donGia, dienTich);
         this.loaiNha = loaiNha;
         this.diaChi = diaChi;
     }
 
-    public String getLoaiNha() {
-        return loaiNha;
-    }
-
-    public void setLoaiNha(String loaiNha) {
-        this.loaiNha = loaiNha;
-    }
-
-    public String getDiaChi() {
-        return diaChi;
-    }
-
-    public void setDiaChi(String diaChi) {
-        this.diaChi = diaChi;
-    }
-
-    public String getMaGD() {
-        return maGD;
-    }
-
-    public void setMaGD(String maGD) {
-        this.maGD = maGD;
-    }
-
-    public String getNgayGD() {
-        return ngayGD;
-    }
-
-    public void setNgayGD(String ngayGD) {
-        this.ngayGD = ngayGD;
-    }
-
-    public double getDonGia() {
-        return donGia;
-    }
-
-    public void setDonGia(double donGia) {
-        this.donGia = donGia;
-    }
-
-    public double getDienTich() {
-        return dienTich;
-    }
-
-    public void setDienTich(double dienTich) {
-        this.dienTich = dienTich;
-    }
-    
-
-    @Override
     public double tinhThanhTien() {
-        if (loaiNha.equals("cao_cap")) {
+        if (loaiNha.equals("cao cap")) {
             return dienTich * donGia;
         } else {
             return dienTich * donGia * 0.9;
